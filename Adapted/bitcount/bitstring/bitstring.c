@@ -1,5 +1,3 @@
-#include "bitops.h"
-
 int total_errors = 0;
 char s[17];
 char *str = s;
@@ -39,7 +37,7 @@ void test(){
 
 void check(){
 
-    for(uint i = 0; i < 17; i++){
+    for(int i = 0; i < 17; i++){
         if(s[i] != result_data[i]){
             total_errors++;
         }

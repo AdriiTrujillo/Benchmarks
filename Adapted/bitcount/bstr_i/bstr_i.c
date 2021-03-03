@@ -1,5 +1,4 @@
 #include <string.h>
-#include "bitops.h"
 
 int total_errors = 0;
 char s[] = "1010110011";

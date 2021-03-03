@@ -1,12 +1,13 @@
-//#include <stdio.h>
+// #include <stdio.h>
 void init();
 void test();
 void check();
-//int result=0;
+// int total_errors;
+
 int main(){
 	init();
 	test();
 	check();
-	//printf("Result: %d", result);
-	//return result;
+	// printf("Result: %d\n", total_errors);
+	// return total_errors;
 }	

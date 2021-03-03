@@ -1,5 +1,3 @@
-#include "bitops.h"
-
 int total_errors = 0;
 int n;
 long x;
@@ -34,7 +32,7 @@ void init()
 
 }
 
-int CDECL btbl_bitcnt(long x)
+int btbl_bitcnt(long x)
 {
       int cnt = bits[ ((char *)&x)[0] & 0xFF ];
 

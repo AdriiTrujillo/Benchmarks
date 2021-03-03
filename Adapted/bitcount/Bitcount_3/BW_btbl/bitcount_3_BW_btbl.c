@@ -1,5 +1,3 @@
-#include "bitops.h"
-
 int total_errors = 0;
 int n;
 long int x;
