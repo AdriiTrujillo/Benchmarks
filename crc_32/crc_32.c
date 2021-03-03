@@ -3,6 +3,7 @@
 /* Crc - 32 BIT ANSI X3.66 CRC checksum files */
 
 #include <stdio.h>
+#include <stdlib.h>
 
 /**********************************************************************\
 |* Demonstration program to compute the 32-bit CRC used as the frame  *|
@@ -152,7 +153,7 @@ char* name;
 long charcnt;
 int errors[2];
 DWORD crc;
-char* files_crc[2] = {"../../benchmark_suites/mibench/telecomm/adpcm/data/large.pcm", "../../benchmark_suites/mibench/telecomm/adpcm/data/small.pcm"};
+char* files_crc[2] = {"large.pcm", "small.pcm"};
 char* expected[2] = {"FFFFFFFFDC8B7C2A 26611200" ,"FFFFFFFF6DA5B639 1368864"};
 char* solutions[2]; 
 int total_errors;
@@ -182,7 +183,7 @@ void test()
                   if ((fin=fopen(name, "r"))==NULL)
             #endif
             {
-                 perror(fin);
+                 perror(name);
                  errors[i] +=1;
                  //return;
             }
