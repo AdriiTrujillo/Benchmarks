@@ -2,7 +2,25 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include "sha.h"
+
+typedef unsigned char BYTE;
+typedef unsigned long LONG;
+
+#define SHA_BLOCKSIZE		64
+#define SHA_DIGESTSIZE		20
+
+typedef struct {
+    LONG digest[5];		/* message digest */
+    LONG count_lo, count_hi;	/* 64-bit bit count */
+    LONG data[16];		/* SHA data buffer */
+} SHA_INFO;
+
+void sha_init(SHA_INFO *);
+void sha_update(SHA_INFO *, BYTE *, int);
+void sha_final(SHA_INFO *);
+
+void sha_stream(SHA_INFO *, FILE *);
+void sha_print(SHA_INFO *);
 
 
 /* SHA f()-functions */
@@ -115,23 +133,10 @@ static void byte_reverse(LONG *buffer, int count)
 
 #endif /* LITTLE_ENDIAN */
 
-/* initialize the SHA digest */
-
-void sha_init(SHA_INFO *sha_info)
-{
-    sha_info->digest[0] = 0x67452301L;
-    sha_info->digest[1] = 0xefcdab89L;
-    sha_info->digest[2] = 0x98badcfeL;
-    sha_info->digest[3] = 0x10325476L;
-    sha_info->digest[4] = 0xc3d2e1f0L;
-    sha_info->count_lo = 0L;
-    sha_info->count_hi = 0L;
-}
-
 /* update the SHA digest */
-
 void sha_update(SHA_INFO *sha_info, BYTE *buffer, int count)
 {
+
     if ((sha_info->count_lo + ((LONG) count << 3)) < sha_info->count_lo) {
 	++sha_info->count_hi;
     }
@@ -150,7 +155,6 @@ void sha_update(SHA_INFO *sha_info, BYTE *buffer, int count)
 }
 
 /* finish computing the SHA digest */
-
 void sha_final(SHA_INFO *sha_info)
 {
     int count;
@@ -178,51 +182,36 @@ void sha_final(SHA_INFO *sha_info)
     sha_transform(sha_info);
 }
 
-/* compute the SHA digest of a FILE stream */
+SHA_INFO sha_info;
+BYTE input_data[] = "VonnegutsCommencementAddressatMITLadiesandgentlemenoftheclassof97WearsunscreenIfIcouldofferyouonlyonetipforthefuturesunscreenwouldbeitThelongtermbenefitsofsunscreenhavebeenprovedbyscientistswhereastherestofmyadvicehasnobasismorereliablethanmyownmeanderingexperienceIwilldispensethisadvicenowEnjoythepowerandbeautyofyouryouthOhnevermindYouwillnotunderstandthepoweraKurtVonnegutsCommencementAddressatMITLadiesandgentlemenoftheclassof97WearsunscreenIfIcouldofferyouonlyonetipforthefuturesunscreenwouldbeitThelongtermbenefitsofsunscreenhavebeenprovedbyscientistswhereastherestofmyadvicehasnobasismorereliablethanmyownmeanderingexperienceIwilldispensethisadvicenowEnjoythepowerandbeautyofyouryouthOhnevermindYouwillnotunderstandthepowerandbeautyofyouryouthuntiltheyvefadedButtrustmein20yearsyoulllookbackatphotosofyourselfandrecallinawayyoucantgraspnowhowmuchpossibilitylaybeforeyouandhowfabulousyoureallylookedYouarenotasfatasyouimagineDontworryaboutthefutureOrworrybutknowthatKurtVonneguKurtVonnegutsCommencementAddressatMITLadiesandgentlemenoftheclassof97WearsunscreenIfIcouldofferyouonlyonetipforthefuturesunscreenwouldbeitThelongtermbenefitsofsunscreenhavebeenprovedbyscientistswhereastherestofmyadvicehasnobasismorereliablethanmyownmeanderingexperienceIwilldispensethisadvicenowEnjoythepowerandbeautyofyouryouthOhnevermindYouwillnotunderstandthepowerandbeautyofyouryouthuntiltheyvefadedButtrustmein20yearsyoulllookbackatphotosofyourselfandrecallinawayyoucantgraspnowhowmuchpossibilitylaybeforeyouandhowfabulousyoureallylookedYouarenotasVonnegutsCommencementAddressatMITLadiesandgentlemenoftheclassof97WearsunscreenIfIcouldofferyouonlyonetipforthefuturesunscreenwouldbeitThelongtermbenefitsofsunscreenhavebeenprovedbyscientistswhereastherestofmyadvicehasnobasismorereliablethanmyownmeanderingexperienceIwilldispensethisadvicenowEnjoythepowerandbeautyofyouryouthOhnevermindYouwillnotunderstandthepoweraKurtVonnegutsCommencementAddressatMITLadiesandgentlemenoftheclassof97WearsunscreenIfIcouldofferyouonlyonetipforthefuturesunscreenwouldbeitThelongtermbenefitsofsunscreenhavebeenprovedbyscientistswhereastherestofmyadvicehasnobasismorereVonnegutsCommencementAddressatMITLadiesandgentlemenoftheclassof97WearsunscreenIfIcouldofferyouonlyonetipforthefuturesunscreenwouldbeitThelongtermbenefitsofsunscreenhavebeenprovedbyscientistswhereastherestofmyadvicehasnobasismorereliablethanmyownmeanderingexperienceIwilldispensethisadvicenowEnjoythepowerandbeautyofyouryouthOhnevermindYouwillnotunderstandthepoweraKurtVonnegutsCommencementAddressatMITLadiesandgentlemenoftheclassof97WearsunscreenIfIcouldofferyouonlyonetipforthefuturesunscreenwouldbeitThelongtermbenefitsofsunscreenhavebeenprovedbyscientistswhereastherestofmyadvicehasnobasismorereliablethanmyownmeanderingexperienceIwilldispensethisadvicenowEnjoythepowerandbeautyofyouryouthOhnevermindYouwillnotunderstandthepowerandbeautyofyouryouthuntiltheyvefadedButtrustmein20yearsyoulllookbackatphotosofyourselfandrecallinawayyoucantgraspnowhowmuchpossibilitylaybeforeyouandhowfabulousyoureallylookedYouarenotasfatasyouimagineDontworryaboutthefutureOrworrybutknowthatKurtVonneguKurtVonnegutsCommencementAddressatMITLadiesandgentlemenoftheclassof97WearsunscreenIfIcouldofferyouonlyonetipforthefuturesunscreenwouldbeitThelongtermbenefitsofsunscreenhavebeenprovedbyscientistswhereastherestofmyadvicehasnobasismorereliablethanmyownmeanderingexperienceIwilldispensethisadvicenowEnjoythepowerandbeautyofyouryouthOhnevermindYouwillnotunderstandthepowerandbeautyofyouryouthuntiltheyvefadedButtrustmein20yearsyoulllookbackatphotosofyourselfandrecallinawayyoucantgraspnowhowmuchpossibilitylaybeforeyouandhowfabulousyoureallylookedYouarenotasVonnegutsCommencementAddressatMITLadiesandgentlemenoftheclassof97WearsunscreenIfIcouldofferyouonlyonetipforthefuturesunscreenwouldbeitThelongtermbenefitsofsunscreenhavebeenprovedbyscientistswhereastherestofmyadvicehasnobasismorereliablethanmyownmeanderingexperienceIwilldispensethisadvicenowEnjoythepowerandbeautyofyouryouthOhnevermindYouwillnotunderstandthepoweraKurtVonnegutsCommencementAddressatMITLadiesandgentlemenoftheclassof97WearsunscreenIfIcouldofferyouonlyonetipforthefuturesunscreenwouldbeitThelongtermbenefitsofsunscreenhavebeenprovedbyscientistswhereastherestofmyadvicehasnobasismorereliablethanmyownmeanderingexperienceIwilldispensethisadvicenowEnjoythepowerandbeautyofyouryouthOhnevermindYouwillnotunderstandthepowerandbeautyofyouryouthuntiltheyvefadedButtrustmein20yearsyoulllookbackatphotosofyourselfandrecallinawayyoucantgraspnowhowmuchpossibilitylaybeforeyouandhowfabulousyoureallylookedYouarenotasfatasyouimagineDontworryaboutthefutureOrworrybutknowthatKurtVonneguKurtVonnegutsCommencementAddressatMITLadiesandgentlemenoftheclassof97WearsunscreenIfIcouldofferyouonlyonetipforthefuturesunscreenwouldbeitThelongtermbenefitsofsunscreenhavebeenprovedbyscientistswhereastherestofmyadvicehasnobasismorereliablethanmyownmeanderingexperienceIwilldispensethisadvicenowEnjoythepowerandbeautyofyouryouthOhnevermindYouwillnotunderstandthepowerandbeautyofyouryouthuntiltheyvefadedButtrustmein20yearsyoulllookbackatphotosofyourselfandrecallinawayyoucantgraspnowhowmuchpossibilitylaybeforeyouandhowfabulousyoureallylookedYouarenotasVonnegutsCommencementAddressatMITLadiesandgentlemenoftheclassof97WearsunscreenIfIcouldofferyouonlyonetipforthefuturesunscreenwouldbeitThelongtermbenefitsofsunscreenhavebeenprovedbyscientistswhereastherestofmyadvicehasnobasismorereliablethanmyownmeanderingexperienceIwilldispensethisadvicenowEnjoythepowerandbeautyofyouryouthOhnevermindYouwillnotunderstandthepoweraKurtVonnegutsCommencementAddressatMITLadiesandgentlemenoftheclassof97WearsunscreenIfIcouldofferyouonlyonetipforthefuturesunscreenwouldbeitThelongtermbenefitsofsunscreenhavebeenprovedbyscientistswhereastherestofmyadvicehasnobasismorereliablethanmyownmeanderingexperienceIwilldispensethisadvicenowEnjoythepowerandbeautyofyouryouthOhnevermindYouwillnotunderstandthepowerandbeautyofyouryouthuntiltheyvefadedButtrustmein20yearsyoulllookbackatphotosofyourselfandrecallinawayyoucantgraspnowhowmuchpossibilitylaybeforeyouandhowfabulousyoureallylookedYouarenotasfatasyouimagineDontworryaboutthefutureOrworrybutknowthatKurtVonneguKurtVonnegutsCommencementAddressatMITLadiesandgentlemenoftheclassof97WearsunscreenIfIcouldofferyouonlyonetipforthefuturesunscreenwouldbeitThelongtermbenefitsofsunscreenhavebeenprovedbyscientistswhereastherestofmyadvicehasnobasismorereliablethanmyownmeanderingexperienceIwilldispensethisadvicenowEnjoythepowerandbeautyofyouryouthOhnevermindYouwillnotunderstandthepowerandbeautyofyouryouthuntiltheyvefadedButtrustmein20yearsyoulllookbackatphotosofyourselfandrecallinawayyoucantgraspnowhowmuchpossibilitylaybeforeyouandhowfabulousyoureallylookedYouarenotas";
+LONG expected[5] = {-4543803999461249135, 8739679016724618791, 2643918942281699884, 2458309738835593298, -2117105895525876361};
+int total_errors = 0;
 
-#define BLOCK_SIZE	8192
+void init(){
 
-void sha_stream(SHA_INFO *sha_info, FILE *fin)
-{
-    int i;
-    BYTE data[BLOCK_SIZE];
+    sha_info.digest[0] = 0x67452301L;
+    sha_info.digest[1] = 0xefcdab89L;
+    sha_info.digest[2] = 0x98badcfeL;
+    sha_info.digest[3] = 0x10325476L;
+    sha_info.digest[4] = 0xc3d2e1f0L;
+    sha_info.count_lo = 0L;
+    sha_info.count_hi = 0L;
 
-    sha_init(sha_info);
-    while ((i = fread(data, 1, BLOCK_SIZE, fin)) > 0) {
-	sha_update(sha_info, data, i);
-    }
-    sha_final(sha_info);
 }
 
-/* print a SHA digest */
+void test(){
 
-void sha_print(SHA_INFO *sha_info)
-{
-    printf("%08lx %08lx %08lx %08lx %08lx\n",
-	sha_info->digest[0], sha_info->digest[1], sha_info->digest[2],
-	sha_info->digest[3], sha_info->digest[4]);
+    sha_update(&sha_info, input_data, 6747);
+    sha_final(&sha_info);
+
 }
 
-int main(int argc, char **argv)
-{
-    FILE *fin;
-    SHA_INFO sha_info;
+void check(){
 
-    if (argc < 2) {
-	fin = stdin;
-	sha_stream(&sha_info, fin);
-	sha_print(&sha_info);
-    } else {
-	while (--argc) {
-	    fin = fopen(*(++argv), "rb");
-	    if (fin == NULL) {
-		printf("error opening %s for reading\n", *argv);
-	    } else {
-		sha_stream(&sha_info, fin);
-		sha_print(&sha_info);
-		fclose(fin);
-	    }
-	}
+    for(int i = 0; i < 5; i++){
+        if(sha_info.digest[i] != expected[i]){
+            total_errors++;
+        }
     }
-    return(0);
+
 }
