@@ -1,3 +1,11 @@
+///////////////////////////////////////////////////////////////////////////
+//                                                                       //
+//   Algorithm name: Ratko's mystery algorithm                           //
+//                                                                       //  
+//   From benchmark "Mi bench": http://vhosts.eecs.umich.edu/mibench/    //
+//                                                                       //
+///////////////////////////////////////////////////////////////////////////
+
 int total_errors = 0;
 int n;
 long x;
