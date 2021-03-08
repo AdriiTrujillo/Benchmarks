@@ -2,9 +2,7 @@
 //
 // AUTHOR:  Sergio Cuenca based on Heather Quinn mm_test.c
 // CONTACT INFO:  
-// LAST EDITED: 05/03/2020
-//
-// 
+// LAST EDITED: 08/03/2021
 //
 //*****************************************************************************
 
@@ -15,8 +13,6 @@ const int second_matrix[side][side] = {{8,7,6,5}, {4,3,2,1}, {1,2,3,4}, {5,6,7,8
 const int check_matrix[side][side] = {{39, 43, 47, 51}, {111, 115, 119, 123}, {123, 119, 115, 111}, {51, 47, 43, 39}};
 int result_matrix[side][side];
 unsigned int total_errors;
-unsigned int counter;
-unsigned int time;
 
 
 void init(){
